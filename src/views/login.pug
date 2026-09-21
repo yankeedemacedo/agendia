@@ -1,0 +1,62 @@
+extends layout
+
+block content
+  .main-auth-container(style="display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 20px;")
+    .registration-area(style="width: 100%; max-width: 450px;")
+      .login-header(style="text-align: center; margin-bottom: 30px;")
+        h1 Bem-vindo à Agendia
+        p(style="color: var(--text-muted);") Acesse sua conta para verificar os eventos disponiveis e garantir sua vaga.
+
+      #error-container(style="display: none; background-color: #ff4d4d22; color: #ff4d4d; padding: 12px; border-radius: 6px; margin-bottom: 20px; text-align: center; border: 1px solid #ff4d4d44;")
+        p#error-text(style="margin: 0; font-size: 0.9rem;")
+
+      form#loginForm.login-form(action="/auth/login", method="POST" style="display: flex; flex-direction: column; gap: 20px;")
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="email") E-mail
+          input#email(type="email", name="email", placeholder="seu@email.com", required)
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="password") Senha
+          input#password(type="password", name="password", placeholder="Digite sua senha", required)
+
+        button.btn-play(type="submit") Entrar
+
+      .login-footer(style="text-align: center; margin-top: 25px; border-top: 1px solid var(--border); padding-top: 20px;")
+        p(style="color: var(--text-muted); margin-bottom: 15px;") Ainda não tem uma conta?
+        a.btn-play(href="/cadastro" style="padding: 12px 24px; font-size: 0.9rem;") Cadastrar-se
+
+  script.
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault(); // <<< ESSENCIAL: impede o navegador de recarregar a página e quebrar o fetch
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorContainer = document.getElementById('error-container');
+      const errorText = document.getElementById('error-text');
+
+      // Reseta o estado do container de erro a cada tentativa
+      errorContainer.style.display = 'none';
+
+      try {
+        const response = await fetch('/auth/login', { // Verifique se sua rota no Express é exatamente essa
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          errorText.innerText = data.error || 'Erro ao realizar login.';
+          errorContainer.style.display = 'block';
+        } else {
+          // Redireciona via cliente usando o caminho retornado pelo servidor
+          window.location.href = data.redirectTo || '/';
+        }
+      } catch (err) {
+        errorText.innerText = 'Erro de conexão com o servidor.';
+        errorContainer.style.display = 'block';
+      }
+    });

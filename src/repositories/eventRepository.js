@@ -1,71 +1,56 @@
-import { db } from "../data/data.js";
-import { randomUUID } from "node:crypto";
-import Fuse from "fuse.js";
+import event from "../models/eventSchema.js";
 import { eventListResponseDTO, eventResponseDTO } from "../dtos/eventDTO.js";
+import { randomUUID } from "node:crypto";
 
 export const getEventsRepository = async () => {
-  db.read();
-  const events = db.data.events;
+  const events = await event.find();
   return eventListResponseDTO(events);
 };
 
 export const getEventByIdRepository = async (id) => {
-  await db.read();
-  const event = db.data.events.find((e) => e.id === id);
-  return event ? eventResponseDTO(event) : null;
+  const foundEvent = await event.findOne({ id: id });
+  return foundEvent ? eventResponseDTO(foundEvent) : null;
 };
 
 export const getEventByNameRepository = async (name) => {
-  await db.read();
-
-  const options = {
-    keys: ["titulo"],
-    //0.0 (perfeito) a 1.0 (completamente diferente)
-    threshold: 0.2,
-  };
-
-  const fuse = new Fuse(db.data.events, options);
-  const results = fuse.search(name);
-  const events = results.map((result) => result.item);
-
+  const events = await event.find({
+    titulo: { $regex: name, $options: "i" },
+  });
   return eventListResponseDTO(events);
 };
 
 export const createEventRepository = async (eventData) => {
-  await db.read();
-  const newEvent = {
+  const newEvent = new event({
     id: randomUUID(),
     ...eventData,
-  };
-  db.data.events.push(newEvent);
-  await db.write();
+    participantes: [],
+  });
+
+  await newEvent.save();
+  console.log(`event repository - newEvent: ${JSON.stringify(newEvent)}`);
   return eventResponseDTO(newEvent);
 };
 
 export const parcialUpdateEventRepository = async (id, eventData) => {
-  await db.read();
-  const eventIndex = db.data.events.findIndex((e) => e.id === id);
-  if (eventIndex === -1) {
-    return null;
-  }
-  db.data.events[eventIndex] = { ...db.data.events[eventIndex], ...eventData };
-  await db.write();
-  return eventResponseDTO(db.data.events[eventIndex]);
+  // Atualiza buscando pelo campo 'id'
+  const updatedEvent = await event.findOneAndUpdate(
+    { id: id },
+    { $set: eventData },
+    { new: true, runValidators: true },
+  );
+
+  return updatedEvent ? eventResponseDTO(updatedEvent) : null;
 };
 
 export const deleteEventRepository = async (id) => {
-  await db.read();
-  const eventIndex = db.data.events.findIndex((e) => e.id === id);
-  if (eventIndex === -1) {
-    return null;
-  }
-  const deletedEvent = db.data.events.splice(eventIndex, 1)[0];
-  await db.write();
-  return eventResponseDTO(deletedEvent);
+  const deletedEvent = await event.findOneAndDelete({ id: id });
+  return deletedEvent ? eventResponseDTO(deletedEvent) : null;
 };
+
 export const getNowCapacityRepository = async (eventId) => {
-  await db.read();
-  const event = db.data.events.find((e) => e.id === eventId);
-  const capacity = event.vagas - event.participantes.length;
+  const foundEvent = await event.findOne({ id: eventId });
+  if (!foundEvent) return 0;
+
+  const capacity = foundEvent.vagas - foundEvent.participantes.length;
   return capacity;
 };

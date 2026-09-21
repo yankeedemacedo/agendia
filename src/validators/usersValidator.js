@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const registerParticipantValidationRules = [
+export const registerUserValidationRules = [
   body("nome").notEmpty().withMessage("O nome é obrigatório"),
   body("email")
     .notEmpty()
@@ -28,7 +28,7 @@ export const registerParticipantValidationRules = [
     .withMessage("A data de nascimento deve estar no formato DD/MM/YYYY"),
 ];
 
-export const partialUpdateParticipantValidationRules = [
+export const partialUpdateUserValidationRules = [
   body("nome").optional(),
   body("email").optional().isEmail().withMessage("O email deve ser válido"),
   body("telefone")

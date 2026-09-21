@@ -1,0 +1,94 @@
+extends layout
+
+block content
+  .main-auth-container(style="display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 20px;")
+    .registration-area(style="width: 100%; max-width: 500px;")
+      .register-header(style="text-align: center; margin-bottom: 30px;")
+        h1 Criar Conta no Agendia
+        p(style="color: var(--text-muted);") Preencha os dados abaixo para começar
+
+      // Container dinâmico para mensagem de sucesso
+      #success-container(style="display: none; color: var(--success); text-align: center; margin-bottom: 20px;")
+        p#success-text
+        a.btn-play(href="/login" style="display: block; margin-top: 10px; font-size: 0.8rem; padding: 10px;") Fazer Login
+
+      // Container dinâmico para mensagens de erro
+      #error-container(style="display: none; background-color: #ff4d4d22; color: #ff4d4d; padding: 12px; border-radius: 6px; margin-bottom: 20px; text-align: center; border: 1px solid #ff4d4d44;")
+        p#error-text(style="margin: 0; font-size: 0.9rem;")
+
+      form#registerForm.register-form(action="/cadastro", method="POST" style="display: flex; flex-direction: column; gap: 15px;")
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="nome") Nome Completo
+          input#nome(type="text", name="nome", placeholder="Seu nome completo", required)
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="email") E-mail
+          input#email(type="email", name="email", placeholder="seu@email.com", required)
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="telefone") Telefone
+          input#telefone(type="tel", name="telefone", placeholder="(00) 00000-0000", required)
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="nascimento") Data de Nascimento
+          input#nascimento(type="date", name="nascimento", required)
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="cpf") CPF
+          input#cpf(type="text", name="cpf", placeholder="000.000.000-00", required)
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="password") Senha
+          input#password(type="password", name="password", placeholder="Crie uma senha segura", required)
+
+        button.btn-play(type="submit" style="margin-top: 10px;") Finalizar Cadastro
+
+      .register-footer(style="text-align: center; margin-top: 25px; border-top: 1px solid var(--border); padding-top: 20px;")
+        p(style="color: var(--text-muted); margin-bottom: 15px;") Já possui uma conta?
+        a.btn-play-gray(href="/login" style="padding: 12px 24px; font-size: 0.9rem;") Voltar para o Login
+
+  script.
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const errorContainer = document.getElementById('error-container');
+      const errorText = document.getElementById('error-text');
+      const successContainer = document.getElementById('success-container');
+      const successText = document.getElementById('success-text');
+      const form = document.getElementById('registerForm');
+
+      errorContainer.style.display = 'none';
+
+      const payload = {
+        nome: document.getElementById('nome').value,
+        email: document.getElementById('email').value,
+        telefone: document.getElementById('telefone').value,
+        dataNascimento: document.getElementById('nascimento').value,
+        cpf: document.getElementById('cpf').value,
+        senha: document.getElementById('password').value
+      };
+
+      try {
+        const response = await fetch('/api/users/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          errorText.innerText = data.error || data.message || 'Erro ao realizar o cadastro.';
+          errorContainer.style.display = 'block';
+        } else {
+          form.style.display = 'none';
+          successText.innerText = data.message || 'Cadastro realizado com sucesso!';
+          successContainer.style.display = 'block';
+        }
+      } catch (err) {
+        errorText.innerText = data.error || 'Erro de conexão com o servidor.';
+        errorContainer.style.display = 'block';
+      }
+    });

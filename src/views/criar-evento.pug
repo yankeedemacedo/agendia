@@ -1,0 +1,110 @@
+extends layout
+
+block content
+  .nav-back
+    a(href="/") 
+      i.fas.fa-chevron-left
+      |   VOLTAR AO PAINEL
+
+  .main-auth-container(style="display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 20px;")
+    .registration-area(style="width: 100%; max-width: 500px;")
+      .register-header(style="text-align: center; margin-bottom: 30px;")
+        h1 Criar Novo Evento
+        p(style="color: var(--text-muted);") Preencha os dados abaixo para publicar na plataforma
+
+      // Container dinâmico para mensagem de sucesso (Colocado fora do form para não sumir)
+      #success-container(style="display: none; color: var(--success, #10b981); text-align: center; margin-bottom: 20px;")
+        i.fas.fa-check-circle(style="font-size: 3rem; margin-bottom: 15px; display: block;")
+        p#success-text
+        a.btn-play(href="/" style="display: block; margin-top: 15px; font-size: 0.8rem; padding: 10px;") Voltar ao Painel
+
+      // Formulário de Criação de Evento
+      form#eventForm.register-form(style="display: flex; flex-direction: column; gap: 15px;")
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="titulo") Título do Evento
+          input#titulo(type="text", name="titulo", placeholder="Ex: Workshop de React Avançado", required)
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="descricao") Descrição
+          textarea#descricao(name="descricao", rows="4", placeholder="Técnicas de otimização e hooks customizados...", required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #fff; resize: vertical; font-family: inherit;")
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="data") Data do Evento
+          input#data(type="date", name="data", required)
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="horario") Horário
+          input#horario(type="time", name="horario", required)
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="local") Local / Plataforma
+          input#local(type="text", name="local", placeholder="Ex: Google Meet", required)
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="acesso") Tipo de Acesso
+          select#acesso(name="acesso", required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #fff;")
+            option(value="Público") Público
+            option(value="Privado") Privado
+            option(value="Restrito") Restrito
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="vagas") Quantidade de Vagas
+          input#vagas(type="number", name="vagas", placeholder="Ex: 45", min="1", required)
+
+        button.btn-play(type="submit" style="margin-top: 10px;") Publicar Evento Agendia
+
+        // Container dinâmico para mensagens de erro (Alinhado corretamente dentro do form)
+        #error-container(style="display: none; background-color: #ff4d4d22; color: #ff4d4d; padding: 12px; border-radius: 6px; margin-top: 10px; text-align: center; border: 1px solid #ff4d4d44;")
+          p#error-text(style="margin: 0; font-size: 0.9rem;")
+
+  script.
+    document.getElementById('eventForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const errorContainer = document.getElementById('error-container');
+      const errorText = document.getElementById('error-text');
+      const successContainer = document.getElementById('success-container');
+      const successText = document.getElementById('success-text');
+      const form = document.getElementById('eventForm');
+
+      errorContainer.style.display = 'none';
+
+      // Tratamento da data para o formato DD-MM-YYYY antes de enviar
+      const rawDate = document.getElementById('data').value;
+      const formattedDate = rawDate.split('-').reverse().join('-');
+
+      const payload = {
+        titulo: document.getElementById('titulo').value,
+        descricao: document.getElementById('descricao').value,
+        data: formattedDate,
+        horario: document.getElementById('horario').value,
+        local: document.getElementById('local').value,
+        acesso: document.getElementById('acesso').value,
+        vagas: parseInt(document.getElementById('vagas').value, 10)
+      };
+
+      try {
+        const response = await fetch('/api/events', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          errorText.innerText = data.error || data.message || 'Erro ao realizar o cadastro do evento.';
+          errorContainer.style.display = 'block';
+        } else {
+          form.style.display = 'none';
+          successText.innerText = 'Evento cadastrado com sucesso!';
+          successContainer.style.display = 'block';
+        }
+      } catch (err) {
+        console.error(err);
+        errorText.innerText = 'Erro de conexão com o servidor.';
+        errorContainer.style.display = 'block';
+      }
+    });

@@ -1,0 +1,190 @@
+extends layout
+
+block content
+  .nav-back
+    a(href="/" style="color: var(--primary, #a855f7); text-decoration: none; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: opacity 0.2s;") 
+      i.fas.fa-chevron-left
+      |   VOLTAR AO PAINEL
+
+  .main-auth-container(style="display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 20px;")
+    .registration-area(style="width: 100%; max-width: 500px;")
+      .register-header(style="text-align: center; margin-bottom: 30px;")
+        i.fa-solid.fa-user-gear(style="color: var(--primary, #a855f7); font-size: 3rem; margin-bottom: 15px;")
+        h1 Meus Dados
+        p(style="color: var(--text-muted, #999);") Visualize ou atualize as informações do seu perfil
+
+      // Containers de Feedback Locais
+      #profile-error(style="display: none; background-color: #ff4d4d22; color: #ff4d4d; padding: 12px; border-radius: 6px; margin-bottom: 20px; text-align: center; border: 1px solid #ff4d4d44;")
+      #profile-success(style="display: none; background-color: #10b98122; color: #10b981; padding: 12px; border-radius: 6px; margin-bottom: 20px; text-align: center; border: 1px solid #10b98144;")
+
+      // Formulário de Atualização de Dados
+      form#profileForm(style="display: flex; flex-direction: column; gap: 15px;" data-user-id=user.id)
+        
+        // Campo Oculto para o ID do Usuário
+        input(type="hidden", name="id", value=user.id)
+
+        // Campo Nome
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="nome") Nome Completo
+          input#nome(type="text", name="nome", value=(user.name || user.nome), required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #fff;")
+
+        // Campo E-mail
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="email") Endereço de E-mail
+          input#email(type="email", name="email", value=user.email, required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #fff;")
+
+        // Campo Telefone
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="telefone") Telefone / WhatsApp
+          input#telefone(type="tel", name="telefone", value=(user.telefone || user.phone), placeholder="Ex: 84999998888", required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #fff;")
+
+        // Campo Data de Nascimento
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="dataNascimento") Data de Nascimento
+          input#dataNascimento(type="date", name="dataNascimento", value=user.dataNascimento, required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #fff;")
+
+        hr(style="border: 0; border-top: 1px solid #333; margin: 10px 0;")
+
+        // Nova Senha (Opcional)
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="novaSenha") Nova Senha (deixe em branco para não alterar)
+          input#novaSenha(type="password", name="novaSenha", placeholder="Sua nova senha de acesso", style="padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #fff;")
+
+        // Confirmação com Senha Atual (Obrigatório para salvar alterações)
+        .form-group(style="display: flex; flex-direction: column; gap: 8px; background: #222222; padding: 15px; border-radius: 6px; border: 1px solid #333;")
+          label(for="senhaAtual" style="font-weight: 600; color: #e2e8f0;") Senha Atual *
+          p(style="color: #999; font-size: 0.8rem; margin: 0 0 5px 0;") Digite sua senha atual para confirmar as alterações.
+          input#senhaAtual(type="password", name="senhaAtual", required placeholder="Sua senha atual", style="padding: 10px; background: #1a1a1a; border: 1px solid #555; border-radius: 4px; color: #fff;")
+
+        // Botão de Atualizar
+        .form-actions(style="margin-top: 10px; position: relative; z-index: 10; pointer-events: auto;")
+          button#btn-save-profile(type="submit" style="width: 100%; padding: 12px; background: var(--primary, #a855f7); color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer !important; transition: background 0.2s;") 
+            i.fa-solid.fa-floppy-disk(style="margin-right: 8px;")
+            | Atualizar Dados
+
+      // Zona de Perigo (Excluir Conta)
+      .danger-zone(style="margin-top: 40px; padding: 20px; border: 1px solid #ff4d4d44; background: #ff4d4d11; border-radius: 8px; position: relative; z-index: 10; pointer-events: auto;")
+        h3(style="color: #ff4d4d; margin-top: 0; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;")
+          i.fa-solid.fa-triangle-exclamation
+          | Zona de Perigo
+        p(style="color: #aaa; font-size: 0.85rem; margin-bottom: 15px;") Ao deletar sua conta, todas as suas inscrições em eventos serão perdidas permanentemente.
+        
+        button#btn-delete-account(type="button" onclick="handleDeleteAccount()" style="width: 100%; padding: 10px; background: #ff4d4d22; color: #ff4d4d; border: 1px solid #ff4d4d44; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer !important; transition: all 0.2s;")
+          i.fa-solid.fa-user-slash(style="margin-right: 8px; pointer-events: none;")
+          | Excluir Minha Conta
+
+  style.
+    #btn-save-profile:hover { opacity: 0.9; }
+    #btn-delete-account:hover { background: #ff4d4d !important; color: #fff !important; }
+    #btn-save-profile:disabled, #btn-delete-account:disabled { opacity: 0.5 !important; cursor: not-allowed !important; }
+    .nav-back a:hover { opacity: 0.8; }
+
+  script.
+    // 1. ATUALIZAÇÃO DOS DADOS
+    document.getElementById('profileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const form = document.getElementById('profileForm');
+      const submitBtn = document.getElementById('btn-save-profile');
+      const errorBox = document.getElementById('profile-error');
+      const successBox = document.getElementById('profile-success');
+
+      errorBox.style.display = 'none';
+      successBox.style.display = 'none';
+      const originalText = submitBtn.innerHTML;
+
+      // Monta o payload incluindo a novaSenha e a senhaAtual obrigatória
+      const payload = {
+        id: form.getAttribute('data-user-id'),
+        nome: document.getElementById('nome').value,
+        email: document.getElementById('email').value,
+        telefone: document.getElementById('telefone').value,
+        dataNascimento: document.getElementById('dataNascimento').value,
+        novaSenha: document.getElementById('novaSenha').value || undefined,
+        senhaAtual: document.getElementById('senhaAtual').value
+      };
+
+      try {
+        submitBtn.innerText = "Salvando...";
+        submitBtn.disabled = true;
+
+        const response = await fetch(`/api/users/${payload.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          errorBox.innerText = data.error || data.message || 'Erro ao tentar atualizar os dados.';
+          errorBox.style.display = 'block';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          successBox.innerText = 'Dados atualizados com sucesso!';
+          successBox.style.display = 'block';
+          document.getElementById('novaSenha').value = '';
+          document.getElementById('senhaAtual').value = '';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      } catch (err) {
+        console.error(err);
+        errorBox.innerText = 'Erro de conexão com o servidor ao salvar.';
+        errorBox.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+
+    // 2. DELEÇÃO DA CONTA
+    async function handleDeleteAccount() {
+      const senhaAtualInput = document.getElementById('senhaAtual').value;
+      
+      if (!senhaAtualInput) {
+        const errorBox = document.getElementById('profile-error');
+        errorBox.innerText = 'Por favor, informe sua "Senha Atual" no formulário antes de prosseguir com a exclusão da conta.';
+        errorBox.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      const confirmFirst = confirm("ATENÇÃO: Você tem certeza absoluta de que deseja deletar sua conta? Esta ação não pode ser desfeita.");
+      if (!confirmFirst) return;
+
+      const confirmSecond = confirm("Esta é a última confirmação. Todos os seus dados Agendia serão limpos. Deseja prosseguir?");
+      if (!confirmSecond) return;
+
+      const form = document.getElementById('profileForm');
+      const userId = form.getAttribute('data-user-id');
+      const deleteBtn = document.getElementById('btn-delete-account');
+      const errorBox = document.getElementById('profile-error');
+
+      try {
+        deleteBtn.innerText = "Excluindo conta...";
+        deleteBtn.disabled = true;
+
+        const response = await fetch(`/api/users/${userId}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ senhaAtual: senhaAtualInput })
+        });
+
+        if (response.ok) {
+          alert("Sua conta foi deletada com sucesso. Redirecionando...");
+          window.location.href = '/auth/logout';
+        } else {
+          const data = await response.json();
+          errorBox.innerText = data.error || data.message || 'Não foi possível deletar sua conta.';
+          errorBox.style.display = 'block';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          deleteBtn.innerHTML = '<i class="fa-solid fa-user-slash" style="margin-right: 8px;"></i>Excluir Minha Conta';
+          deleteBtn.disabled = false;
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Erro de conexão com o servidor ao tentar excluir a conta.");
+        deleteBtn.disabled = false;
+      }
+    }

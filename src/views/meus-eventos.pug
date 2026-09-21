@@ -1,0 +1,114 @@
+extends layout
+
+block content
+  .profile-container(style="max-width: 800px; margin: 40px auto; padding: 20px;")
+    
+    //- Link Voltar ao Catálogo
+    .nav-back(style="margin-bottom: 25px;")
+      a(href="/" style="color: var(--primary, #a855f7); text-decoration: none; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: opacity 0.2s;") 
+        i.fas.fa-chevron-left
+        | VOLTAR AO CATÁLOGO
+
+    //- Cabeçalho da Seção com Ícone
+    .profile-header(style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;")
+      i.fa-solid.fa-ticket(style="color: var(--primary, #a855f7); font-size: 1.8rem;")
+      h2(style="margin: 0; font-size: 1.8rem; color: #fff;") Minhas Inscrições
+    p(style="color: var(--text-muted, #999); margin-top: 0; margin-bottom: 30px; font-size: 0.95rem;") 
+      | Gerencie aqui as vagas que você garantiu nos eventos originais.
+
+    if userEvents && userEvents.length > 0
+      .events-list(style="display: flex; flex-direction: column; gap: 16px;")
+        each event in userEvents
+          //- Card do Evento (Sem efeito de hover ou transformação global)
+          .event-card(style="background: var(--background-alt, #1a1a1a); padding: 24px; border-radius: 12px; border: 1px solid var(--border, #2a2a2a); display: flex; justify-content: space-between; align-items: center; gap: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); position: relative; z-index: 1;" data-event-id=event.id)
+            
+            .event-details(style="flex: 1; min-width: 0;")
+              h3(style="margin: 0 0 12px 0; font-size: 1.25rem; color: #fff; font-weight: 600;")= event.titulo || event.title
+              
+              //- Meta-dados organizados em blocos visuais flexíveis
+              .event-meta(style="display: flex; flex-wrap: wrap; gap: 16px; color: var(--text-gray, #aaa); font-size: 0.85rem;")
+                span(style="display: flex; align-items: center; gap: 6px;")
+                  i.far.fa-calendar-check(style="color: var(--primary, #a855f7);")
+                  | #{event.data}
+                span(style="display: flex; align-items: center; gap: 6px;")
+                  i.far.fa-clock(style="color: var(--primary, #a855f7);")
+                  | #{event.horario}
+            
+            //- Container isolado com z-index alto para o botão receber cliques sem barreiras
+            .event-actions(style="position: relative; z-index: 10; pointer-events: auto;")
+              button.btn-cancel-profile(type="button" onclick="handleCancelRegistration(this)" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 12px 20px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer !important; display: flex; align-items: center; gap: 8px; white-space: nowrap; transition: all 0.2s;")
+                i.fas.fa-trash-alt(style="pointer-events: none;")
+                | Cancelar Inscrição
+
+    else
+      //- Estado Vazio (Empty State) Estilizado
+      .empty-state(style="background: var(--background-alt, #1a1a1a); border: 1px dashed var(--border, #333); padding: 40px; text-align: center; border-radius: 12px;")
+        i.fa-solid.fa-calendar-xmark(style="font-size: 2.5rem; color: var(--text-muted, #555); margin-bottom: 16px;")
+        p(style="color: var(--text-muted, #999); margin: 0 0 16px 0; font-size: 0.95rem;") Você ainda não se inscreveu em nenhum evento.
+        a.btn-catalog(href="/" style="display: inline-flex; align-items: center; gap: 8px; background: var(--primary, #a855f7); color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: 500; font-size: 0.9rem; transition: opacity 0.2s;")
+          i.fa-solid.fa-magnifying-glass
+          | Explorar Catálogo
+
+  //- Estilos focados puramente nos botões e links de navegação
+  style.
+    .nav-back a:hover {
+      opacity: 0.8;
+    }
+    .btn-cancel-profile:hover {
+      background: #ef4444 !important;
+      color: #fff !important;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+    .btn-cancel-profile:disabled {
+      opacity: 0.5 !important;
+      cursor: not-allowed !important;
+    }
+    .btn-catalog:hover {
+      opacity: 0.9;
+    }
+
+  //- Script simplificado e encapsulado por função global de escopo nativo
+  script.
+    async function handleCancelRegistration(button) {
+      if (!confirm("Tem certeza que deseja cancelar sua inscrição neste evento?")) return;
+
+      const card = button.closest('.event-card');
+      const eventId = card.getAttribute('data-event-id');
+      const originalText = button.innerHTML;
+
+      try {
+        button.innerText = "Cancelando...";
+        button.disabled = true;
+
+        const response = await fetch(`/api/participants/${eventId}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (response.ok) {
+          alert("Inscrição cancelada com sucesso!");
+          
+          // Transição de desaparecimento do card antes de sair da árvore do DOM
+          card.style.opacity = '0';
+          card.style.transform = 'scale(0.95)';
+          card.style.transition = 'all 0.3s ease';
+          
+          setTimeout(() => {
+            card.remove();
+            // Se após a remoção a lista esvaziar completamente, recarrega para exibir o Empty State
+            if (document.querySelectorAll('.event-card').length === 0) {
+              window.location.reload();
+            }
+          }, 300);
+        } else {
+          const data = await response.json();
+          alert("Erro: " + (data.error || "Não foi possível processar o cancelamento."));
+          button.innerHTML = originalText;
+          button.disabled = false;
+        }
+      } catch (error) {
+        alert("Erro de conexão com o servidor ao tentar cancelar.");
+        button.innerHTML = originalText;
+        button.disabled = false;
+      }
+    }

@@ -14,9 +14,6 @@ export const eventCreateValidationRules = [
     .isLength({ min: 5, max: 5 })
     .withMessage("O horário deve estar no formato HH:mm"),
   body("local").notEmpty().withMessage("O local é obrigatório"),
-  body("participantes")
-    .isArray()
-    .withMessage("Os participantes devem ser um array de strings"),
   body("vagas")
     .notEmpty()
     .withMessage("O número de vagas é obrigatório")

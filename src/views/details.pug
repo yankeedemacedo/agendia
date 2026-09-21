@@ -2,9 +2,9 @@ extends layout
 
 block content
   .nav-back
-    a(href="/") 
+    a(href="/" style="color: var(--primary, #a855f7); text-decoration: none; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: opacity 0.2s;") 
       i.fas.fa-chevron-left
-      |  VOLTAR AO CATÁLOGO
+      |   VOLTAR AO CATÁLOGO
   
   article.hero-info
     .badge-original EVENTO ORIGINAL AGENDIA
@@ -28,37 +28,80 @@ block content
     - const vagasRestantes = vagasTotal - ocupadas
 
     .vagas-status
-      if vagasRestantes <= 0
+      if isParticipating
+        span.tag-inscrito(style="color: var(--success, #10b981); font-weight: bold;") ✓ VOCÊ JÁ ESTÁ INSCRITO
+      else if vagasRestantes <= 0
         span.tag-esgotado 🚫 ESGOTADO
       else
-        span.tag-vagas #{vagasRestantes} VAGAS RESTANTES
+        span.tag-vagas #{vagasRestantes}/#{vagasTotal} VAGAS
 
-  section.registration-area
-    div.reg-header
-      i.fas.fa-ticket-alt
+  // 🌟 NOVO: Alerta condicional para Eventos Restritos ou Privados
+  if event.acesso !== 'Público'
+    .restricted-alert(style="margin-top: 20px; padding: 15px 20px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; display: flex; align-items: flex-start; gap: 12px;")
+      i.fas.fa-shield-halved(style="color: #f59e0b; font-size: 1.3rem; margin-top: 2px;")
+      div
+        h4(style="color: #f59e0b; margin: 0 0 5px 0; font-size: 0.95rem; font-weight: 600;") Evento com Acesso Restrito/Privado
+        p(style="color: #e5e7eb; margin: 0; font-size: 0.85rem; line-height: 1.4;") Por se tratar de um evento restrito/privado, poderá haver verificação de documentos oficiais com foto na portaria e checagem de nome na lista de presença oficial na entrada do local.
+
+  section.registration-area(style="margin-top: 30px; padding: 25px; background: var(--background-alt, #1a1a1a); border-radius: 8px;")
+    div.reg-header(style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;")
+      i.fas.fa-ticket-alt(style="color: var(--primary, #a855f7); font-size: 1.2rem;")
       h3 Solicitar Acesso
     
-    p Preencha os dados abaixo para garantir sua vaga.
+    if user
+      form#eventActionForm(data-event-id=event.id)
+        if isParticipating
+          p(style="color: var(--text-muted);") Você já garantiu sua vaga neste evento. Gerencie suas inscrições no seu painel de usuário.
+          button.btn-play.disabled(type="button" disabled style="width: 100%; opacity: 0.6;") JÁ INSCRITO
+        else if vagasRestantes <= 0
+          button.btn-play.disabled(type="button" disabled style="width: 100%;") ESGOTADO
+        else
+          p Você está conectado como #[strong #{user.name || user.nome}]. Clique abaixo para garantir seu ingresso instantaneamente.
+          button.btn-play(type="submit" style="width: 100%; margin-top: 15px;") 
+            i.fas.fa-bolt(style="margin-right: 8px;")
+            | INSCREVER-SE AGORA (1-CLIQUE)
+    else
+      p(style="color: var(--text-muted);") Você precisa estar conectado à sua conta para garantir vagas em nossos eventos.
+      a.btn-play(href="/login" style="display: inline-block; text-align: center; width: 100%; text-decoration: none; margin-top: 15px;") 
+        i.fas.fa-sign-in-alt(style="margin-right: 8px;")
+        | FAZER LOGIN PARA SE INSCREVER
 
-    //- Função fetch definida no layout
-    form(onsubmit=`sendForm(event, '/events/${event.id}/register')`)
-      .input-grid(style="display: grid; grid-template-columns: 2fr 2fr; gap: 20px;")
-        .field(style="display: flex; flex-direction: column;")
-          label Nome Completo
-          input(type="text", name="nome", placeholder="Ex: João Silva", required)
-        .field(style="display: flex; flex-direction: column;")
-          label E-mail
-          input(type="email", name="email", placeholder="joao@email.com", required)
-        .field(style="display: flex; flex-direction: column;")
-          label CPF
-          input(type="text", name="cpf", placeholder="000.000.000-00", required)
-        .field(style="display: flex; flex-direction: column;")
-          label Telefone / WhatsApp
-          input(type="text", name="telefone", placeholder="(84) 99999-9999")
-      
-      if vagasRestantes > 0
-        button.btn-play(type="submit" style="margin-top: 20px; width: 100%;") 
-          i.fas.fa-check
-          |  CONFIRMAR MINHA INSCRIÇÃO
-      else
-        button.btn-play.disabled(type="button" disabled style="margin-top: 20px; width: 100%;") ESGOTADO
+  script.
+    const actionForm = document.getElementById('eventActionForm');
+    if (actionForm) {
+      actionForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const eventId = actionForm.getAttribute('data-event-id');
+        const submitBtn = e.target.querySelector('button');
+        const originalText = submitBtn.innerHTML;
+        
+        try {
+          submitBtn.innerText = "RESERVANDO VAGA...";
+          submitBtn.disabled = true;
+
+          const response = await fetch(`/api/participants/${eventId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert(data.message || "Vaga garantida com sucesso!");
+            window.location.reload(); 
+          } else {
+            alert(data.error || data.message || "Não foi possível processar sua inscrição.");
+          }
+        } catch (error) {
+          console.error(error);
+          // 🌟 Corrigido de 'data.error' para uma mensagem amigável real de conexão
+          alert("Erro de conexão com o servidor ao processar a inscrição.");
+        } finally {
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+        }
+      });
+    }

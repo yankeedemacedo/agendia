@@ -6,6 +6,8 @@
 :root {
   --primary: #ea00ff;
   --primary-dark: #7603ac;
+  --gray-light: #a0a0a0;
+  --gray-dark: #2a2a2a;
   --bg-dark: #121212; /* Escurecido para dar mais contraste ao roxo */
   --bg-card: #1e1e1e;
   --text-main: #ffffff;
@@ -13,9 +15,9 @@
   --success: #00ff62; /* Verde mais vibrante/neon */
   --border: rgba(255, 255, 255, 0.08); /* Bordas sutis e semi-transparentes */
 
-  --color-publico: #00d4ff;
+  --color-publico: #ffffff;
   --color-privado: #bd79ff;
-  --color-restrito: #ffc107;
+  --color-restrito: #fc1406;
 
   --shadow-glow: 0 0 20px rgba(234, 0, 255, 0.2);
   --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -55,12 +57,22 @@ body::before {
 /* ==========================================================================
    LAYOUT (HEADER & CONTAINER)
    ========================================================================== */
-header.principal,
-header.section-header {
+header.principal {
   padding: 1.5rem 5%;
   background: rgba(18, 18, 18, 0.8);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header.section-header {
+  padding: 1.5rem 5%;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -153,13 +165,13 @@ header h1 {
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   letter-spacing: 1px;
 }
 
 .status-badge.publico {
   color: var(--color-publico);
-  box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 .status-badge.privado {
   color: var(--color-privado);
@@ -167,7 +179,7 @@ header h1 {
 }
 .status-badge.restrito {
   color: var(--color-restrito);
-  box-shadow: 0 0 10px rgba(255, 193, 7, 0.2);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
 }
 
 .event-card h3 {
@@ -225,6 +237,7 @@ input:focus {
   color: white;
   border: none;
   padding: 20px 40px;
+  text-decoration: none;
   font-size: 1.1rem;
   font-weight: 700;
   border-radius: 12px;
@@ -237,6 +250,26 @@ input:focus {
 .btn-play:hover {
   transform: translateY(-3px);
   box-shadow: 0 15px 30px rgba(234, 0, 255, 0.4);
+  filter: brightness(1.2);
+}
+
+.btn-play-gray {
+  background: linear-gradient(135deg, var(--gray-light), var(--gray-dark));
+  color: white;
+  border: none;
+  padding: 20px 40px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-play-gray:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(42, 42, 42, 0.4);
   filter: brightness(1.2);
 }
 

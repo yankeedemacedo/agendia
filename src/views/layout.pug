@@ -5,27 +5,78 @@ html(lang="pt-br")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title agendia | Eventos Originais
     
-    //- Favicon (O 'A' do Spotlight)
     link(rel="shortcut icon", href="/images/favicon.png", type="image/png")
-    
     link(rel="stylesheet", href="/css/style.css")
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css")
   body
+    //- Cabeçalho Principal: Apenas a Logo Centralizada
     header.principal
-      .header-container(style="display: flex; justify-content: center; align-items: center; width: 100%;")
+      .header-container(style="display: flex; justify-content: center; align-items: center; height: 50px; width: 100%;")
         a(href="/" style="text-decoration:none")
-          //- Logo Principal do Header
           img.logo-header(src="/images/logo-agendia-header.png" alt="Agendia" style="height: 45px; width: auto;")
     
-    main.container
+    //- Subcabeçalho / Widget de Usuário Dinâmico
+    if user
+      .user-sub-header(style="background-color: var(--background-alt, #1a1a1a); border-bottom: 1px solid var(--border, #333); padding: 10px 0;")
+        .sub-header-container(style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;")
+          
+          //- Lado Esquerdo do Widget: Nome do Usuário e Links de Navegação
+          .user-navigation(style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;")
+            .user-info(style="display: flex; align-items: center; gap: 8px; color: #fff; font-size: 0.9rem; font-weight: 500; margin-right: 10px;")
+              //- Alterado de 'i' para 'a' e estilizado para manter o visual original
+              a(href="/perfil" style="color: var(--primary, #a855f7); text-decoration: none; font-size: 1.1rem; display: inline-flex; align-items: center; transition: opacity 0.2s;")
+                i.fa-solid.fa-user-circle
+              span #{user.name || user.nome}
+            
+            //- Bloco Isolado do Admin: Renderiza os botões extras APENAS se for administrador
+            if user.role === 'admin' || user.papel === 'admin' || user.userRole === 'admin'
+              a.btn-admin-action(href="/admin/criar-evento" style="color: var(--primary, #a855f7); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--primary, #a855f7); border-radius: 4px; transition: all 0.2s;")
+                i.fa-solid.fa-plus
+                | Criar Evento
+              
+              a.btn-admin-action(href="/admin/eventos" style="color: var(--primary, #a855f7); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--primary, #a855f7); border-radius: 4px; transition: all 0.2s;")
+                i.fa-solid.fa-sliders
+                | Analisar/Alterar Eventos
+            
+            //- Botão Padrão: Fora do bloco IF/ELSE. Renderiza para TODOS os usuários logados (comum e admin)
+            a.btn-my-registrations(href="/meus-eventos" style="color: var(--primary, #a855f7); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--primary, #a855f7); border-radius: 4px; transition: all 0.2s;")
+              i.fa-solid.fa-ticket
+              | Ver minhas inscrições
+          
+          //- Lado Direito do Widget: Ação de Sair
+          a(href="/auth/logout" style="color: var(--text-muted, #999); text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; gap: 5px; transition: color 0.2s;")
+            i.fa-solid.fa-right-from-bracket
+            | Sair
+
+    main.container(style="margin-top: 20px;")
       block content
 
-    footer
-      .footer-content(style="display: flex; flex-direction: column; align-items: center;")
-        //- Logo Simplificada ou Monograma para o Footer
-        img.logo-footer(src="/images/logo-agendia-footer.png" alt="Agendia" style="height: 100px; width: auto; margin-bottom: 20px; opacity: 0.6;")
-        p &copy; 2026 Agendia Brasil. Todos os direitos reservados.
-    //- Script Global para Fetch
+    footer(style="margin-top: 50px; padding: 30px 0; border-top: 1px solid var(--border, #2a2a2a);")
+      .footer-content(style="display: flex; flex-direction: column; align-items: center; gap: 12px;")
+        img.logo-footer(src="/images/logo-agendia-footer.png" alt="Agendia" style="height: 100px; width: auto; margin-bottom: 10px; opacity: 0.6;")
+        
+        p(style="margin: 0; color: var(--text-gray, #aaa); font-size: 0.9rem;") 
+          | Desenvolvido por Yankee de Macedo
+        
+        .footer-socials(style="display: flex; gap: 16px; margin: 8px 0;")
+          a(href="https://github.com/yankeemauricio" target="_blank" title="GitHub" style="color: var(--text-muted, #999); font-size: 1.3rem; transition: color 0.2s;")
+            i.fa-brands.fa-github
+          a(href="https://linkedin.com/in/yankeemauricio" target="_blank" title="LinkedIn" style="color: var(--text-muted, #999); font-size: 1.3rem; transition: color 0.2s;")
+            i.fa-brands.fa-linkedin
+    
+    style.
+      .btn-admin-action:hover {
+        background: var(--primary, #a855f7);
+        color: #fff !important;
+      }
+      .btn-my-registrations:hover {
+        background: var(--primary, #a855f7);
+        color: #fff !important;
+      }
+      .user-info a:hover {
+        filter: brightness(1.5);
+      }
+
     script.
       async function sendForm(event, url) {
         event.preventDefault();

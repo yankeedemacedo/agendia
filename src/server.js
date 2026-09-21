@@ -1,9 +1,13 @@
 import app from "./app.js";
-import "dotenv/config.js";
+import dotenv from "dotenv";
+import { connectDB } from "./data/database.js";
 
-const PORT = 3000;
+dotenv.config();
 
-app.listen(PORT, () => {
-  console.log(`Access events on http://localhost:${PORT}/`);
-  console.log(`Server is running on http://localhost:${PORT}/api/events`);
+const PORT = process.env.PORT;
+
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando em: http://localhost:${PORT}`);
+  });
 });

@@ -1,57 +1,54 @@
 import {
-  getParticipantsRepository,
-  getParticipantByNameRepository,
-  registerParticipantRepository,
-  parcialUpdateParticipantRepository,
+  createParticipantRepository,
   deleteParticipantRepository,
+  getParticipantRepository,
 } from "../repositories/participantRepository.js";
-import { getNowCapacityRepository } from "../repositories/eventRepository.js";
 
-export const getParticipantsService = async (eventId) => {
-  const participants = await getParticipantsRepository(eventId);
-  return participants;
-};
-
-export const getParticipantByNameService = async (eventId, name) => {
-  const participant = await getParticipantByNameRepository(eventId, name);
-  if (!participant) {
-    throw new Error("Nenhum participante encontrado com o nome informado");
+export const createParticipantService = async (eventId, participantId) => {
+  try {
+    const existingParticipant = await getParticipantRepository(
+      eventId,
+      participantId,
+    );
+    if (existingParticipant) {
+      throw new Error("Participante já registrado para este evento");
+    }
+    const newParticipant = await createParticipantRepository(
+      eventId,
+      participantId,
+    );
+    return newParticipant;
+  } catch (error) {
+    if (error.message === "Participante já registrado para este evento") {
+      error.statusCode = 409; // Conflito
+    } else {
+      error.statusCode = 500; // Erro interno do servidor
+    }
+    throw error;
   }
-  return participant;
-};
-
-export const registerParticipantService = async (eventId, participantData) => {
-  const capacity = await getNowCapacityRepository(eventId);
-  if (capacity <= 0) {
-    throw new Error("Não há vagas disponíveis para o evento");
-  }
-  const newParticipant = await registerParticipantRepository(
-    eventId,
-    participantData,
-  );
-  return newParticipant;
-};
-
-export const partialUpdateParticipantService = async (
-  eventId,
-  participantId,
-  participantData,
-) => {
-  const participant = await parcialUpdateParticipantRepository(
-    eventId,
-    participantId,
-    participantData,
-  );
-  if (!participant) {
-    throw new Error("Participante não encontrado");
-  }
-  return participant;
 };
 
 export const deleteParticipantService = async (eventId, participantId) => {
-  const participant = await deleteParticipantRepository(eventId, participantId);
-  if (!participant) {
-    throw new Error("Participante não encontrado");
+  try {
+    console.log("Deletando participante:", { eventId, participantId });
+    const existingParticipant = await getParticipantRepository(
+      eventId,
+      participantId,
+    );
+    if (!existingParticipant) {
+      throw new Error("Participante não encontrado para este evento");
+    }
+    const participant = await deleteParticipantRepository(
+      eventId,
+      participantId,
+    );
+    return participant;
+  } catch (error) {
+    if (error.message === "Participante não encontrado para este evento") {
+      error.statusCode = 404; // Não encontrado
+    } else {
+      error.statusCode = 500; // Erro interno do servidor
+    }
+    throw error;
   }
-  return participant;
 };

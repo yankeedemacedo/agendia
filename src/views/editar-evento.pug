@@ -1,0 +1,139 @@
+extends layout
+
+block content
+  .nav-back
+    a(href="/admin/eventos" style="color: var(--primary, #a855f7); text-decoration: none; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: opacity 0.2s;") 
+      i.fas.fa-chevron-left
+      |   VOLTAR AO GERENCIAMENTO
+
+  .main-auth-container(style="display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 20px;")
+    .registration-area(style="width: 100%; max-width: 500px;")
+      .register-header(style="text-align: center; margin-bottom: 30px;")
+        h1 Editar Evento
+        p(style="color: var(--text-muted, #999);") Altere os dados abaixo para atualizar o evento na plataforma
+
+      // Containers de Feedback Locais
+      #error-container(style="display: none; background-color: #ff4d4d22; color: #ff4d4d; padding: 12px; border-radius: 6px; margin-bottom: 20px; text-align: center; border: 1px solid #ff4d4d44;")
+        p#error-text(style="margin: 0; font-size: 0.9rem;")
+
+      #success-container(style="display: none; color: var(--success, #10b981); text-align: center; margin-bottom: 20px;")
+        i.fas.fa-check-circle(style="font-size: 3rem; margin-bottom: 15px; display: block;")
+        p#success-text
+        a.btn-play(href="/admin/eventos" style="display: block; margin-top: 15px; font-size: 0.8rem; padding: 10px; background: var(--primary, #a855f7); text-align: center; color: #fff; text-decoration: none; border-radius: 4px;") Voltar ao Gerenciamento
+
+      // Formulário de Edição de Evento (Passando o id no dataset para o JS ler de forma segura)
+      form#editEventForm.register-form(style="display: flex; flex-direction: column; gap: 15px;" data-event-id=event.id)
+        
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="titulo") Título do Evento
+          input#titulo(type="text", name="titulo", value=event.titulo, placeholder="Ex: Workshop de React Avançado", required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #fff;")
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="descricao") Descrição
+          textarea#descricao(name="descricao", rows="4", placeholder="Técnicas de otimização...", required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #fff; resize: vertical; font-family: inherit;") #{event.descricao}
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="data") Data do Evento
+          // Nota: O valor de 'event.data' deve ser injetado no formato YYYY-MM-DD para funcionar nativamente no input date do HTML
+          input#data(type="date", name="data", value=event.dataFormatoInput, required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #fff;")
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="horario") Horário
+          input#horario(type="time", name="horario", value=event.horario, required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #fff;")
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="local") Local / Plataforma
+          input#local(type="text", name="local", value=event.local, placeholder="Ex: Google Meet", required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #fff;")
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="acesso") Tipo de Acesso
+          select#acesso(name="acesso", required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #fff;")
+            option(value="Público", selected=event.acesso === 'Público') Público
+            option(value="Privado", selected=event.acesso === 'Privado') Privado
+            option(value="Restrito", selected=event.acesso === 'Restrito') Restrito
+
+        .form-group(style="display: flex; flex-direction: column; gap: 8px;")
+          label(for="vagas") Quantidade de Vagas
+          input#vagas(type="number", name="vagas", value=event.vagas, placeholder="Ex: 45", min="1", required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #fff;")
+
+        // Isolado com z-index e pointer-events livre para evitar travas de clique
+        .form-actions(style="margin-top: 10px; position: relative; z-index: 10; pointer-events: auto;")
+          button#btn-submit-edit(type="submit" style="width: 100%; padding: 12px; background: var(--primary, #a855f7); color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer !important; transition: background 0.2s;") Atualizar Evento
+
+  style.
+    #btn-submit-edit:hover {
+      opacity: 0.9;
+    }
+    #btn-submit-edit:disabled {
+      opacity: 0.5 !important;
+      cursor: not-allowed !important;
+    }
+    .nav-back a:hover {
+      opacity: 0.8;
+    }
+
+  script.
+    document.getElementById('editEventForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const form = document.getElementById('editEventForm');
+      const eventId = form.getAttribute('data-event-id');
+      const submitBtn = document.getElementById('btn-submit-edit');
+      const errorContainer = document.getElementById('error-container');
+      const errorText = document.getElementById('error-text');
+      const successContainer = document.getElementById('success-container');
+      const successText = document.getElementById('success-text');
+
+      errorContainer.style.display = 'none';
+      const originalBtnText = submitBtn.innerText;
+
+      // Tratamento da data para salvar em formato DD-MM-YYYY (se o seu backend exigir esse formato)
+      const rawDate = document.getElementById('data').value;
+      const formattedDate = rawDate.split('-').reverse().join('-');
+
+      const payload = {
+        titulo: document.getElementById('titulo').value,
+        descricao: document.getElementById('descricao').value,
+        data: formattedDate,
+        horario: document.getElementById('horario').value,
+        local: document.getElementById('local').value,
+        acesso: document.getElementById('acesso').value,
+        vagas: parseInt(document.getElementById('vagas').value, 10)
+      };
+
+      try {
+        submitBtn.innerText = "Atualizando...";
+        submitBtn.disabled = true;
+
+        // Dispara o PATCH para a rota correta: /api/events/:id
+        const response = await fetch(`/api/events/${eventId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          errorText.innerText = data.error || data.message || 'Erro ao tentar atualizar os dados do evento.';
+          errorContainer.style.display = 'block';
+          submitBtn.innerHTML = originalBtnText;
+          submitBtn.disabled = false;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          form.style.display = 'none';
+          successText.innerText = 'Evento atualizado com sucesso!';
+          successContainer.style.display = 'block';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      } catch (err) {
+        console.error(err);
+        errorText.innerText = 'Erro de conexão com o servidor ao salvar.';
+        errorContainer.style.display = 'block';
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });

@@ -1,4 +1,77 @@
 {
+  "users": [
+    {
+      "id": "29269589-c56b-4d4d-9c80-278467b6cb4f",
+      "nome": "Teste",
+      "email": "teste@email.com",
+      "telefone": "00912121212",
+      "dataNascimento": "2002-12-12",
+      "cpf": "12312354645",
+      "senha": "$2b$10$tTGRFOjXfODxMG/6NHvXnOGw8muw8Xu9hjwd0Fysj3uGq.HY4JnMu",
+      "eventos": [
+        "f8e7d6c5-b4a3-4210-9182-736455463728",
+        "4e7c7a52-9b2e-4f1a-8c9e-5872a4837b12",
+        "b5a4c3d2-e1f0-498b-7c6d-5e4f3a2b1c0d",
+        "d1a2b3c4-5e6f-7a8b-9c0d-1e2f3a4b5c6d"
+      ]
+    },
+    {
+      "id": "e5734440-91b8-4c0b-a73f-89c27708c6c8",
+      "nome": "Yankee Mauricio Gomes de Macedo",
+      "email": "yankeemauricio2@gmail.com",
+      "telefone": "84981578181",
+      "dataNascimento": "2002-12-04",
+      "cpf": "70135366445",
+      "senha": "$2b$10$Rsr90vsiuwCoGmIGKiGCyesUrUaoiUYLXYoXNEKJmjXGS7bz0lJpy",
+      "eventos": [
+        "b1a2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+        "d1a2b3c4-5e6f-7a8b-9c0d-1e2f3a4b5c6d"
+      ]
+    },
+    {
+      "id": "f515c9df-93b8-41bf-8707-5a2185a03486",
+      "nome": "Ana",
+      "email": "anabea1106@gmail.com",
+      "telefone": "84999694782",
+      "dataNascimento": "2006-06-10",
+      "cpf": "11111111112",
+      "senha": "$2b$10$m6avrYbzDqbjZLIe0.WIjelwa0RooEo2pqM6qi3Ii3NqhEmfrA1pu",
+      "eventos": []
+    },
+    {
+      "id": "32fb81b3-c71e-4dad-b4d2-ade5227e5af1",
+      "nome": "Sophia",
+      "email": "ssophiabdm@gmail.com",
+      "telefone": "84999169852",
+      "dataNascimento": "2005-11-09",
+      "cpf": "08759764414",
+      "senha": "$2b$10$D37jWfareIdqWgmPyji3u.FvTy11cpMWWexth0jeCj3K7hFKk3kxW",
+      "eventos": []
+    },
+    {
+      "id": "bb34de84-2286-4819-8030-d0a7cc9b9e41",
+      "nome": "Teste Admin",
+      "email": "testeadmin@email.com",
+      "telefone": "88988558855",
+      "dataNascimento": "2002-12-04",
+      "cpf": "00000000002",
+      "senha": "$2b$10$/zo5s7/zS06jb10HeUDm4.Fx8SZMtLcBC6BgTSsjhVrsTmybk0LTq",
+      "eventos": [
+        "b1a2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d"
+      ],
+      "papel": "admin"
+    },
+    {
+      "id": "04dced36-25ef-432b-8520-e947941012cb",
+      "nome": "Teste 2",
+      "email": "teste2@email.com",
+      "telefone": "84988889999",
+      "dataNascimento": "2002-12-04",
+      "cpf": "12312345689",
+      "senha": "$2b$10$jUDIFNQh/F/Q7tgcyycZUu5uBSxG0/DBPR3GfpxGzU0z01BtSjOXu",
+      "eventos": []
+    }
+  ],
   "events": [
     {
       "id": "4e7c7a52-9b2e-4f1a-8c9e-5872a4837b12",
@@ -7,17 +80,11 @@
       "data": "10-08-2026",
       "horario": "14:00",
       "local": "Google Meet",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
-      "vagas": 45
+      "vagas": 45,
+      "participantes": [
+        "29269589-c56b-4d4d-9c80-278467b6cb4f"
+      ]
     },
     {
       "id": "b1a2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
@@ -26,17 +93,12 @@
       "data": "11-08-2026",
       "horario": "09:00",
       "local": "Discord",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Privado",
-      "vagas": 30
+      "vagas": 30,
+      "participantes": [
+        "e5734440-91b8-4c0b-a73f-89c27708c6c8",
+        "bb34de84-2286-4819-8030-d0a7cc9b9e41"
+      ]
     },
     {
       "id": "f8e7d6c5-b4a3-4210-9182-736455463728",
@@ -45,17 +107,11 @@
       "data": "12-08-2026",
       "horario": "19:30",
       "local": "YouTube Live",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
-      "vagas": 100
+      "vagas": 100,
+      "participantes": [
+        "29269589-c56b-4d4d-9c80-278467b6cb4f"
+      ]
     },
     {
       "id": "d1a2b3c4-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
@@ -64,31 +120,12 @@
       "data": "13-08-2026",
       "horario": "10:00",
       "local": "Escritório Presencial",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        },
-        {
-          "id": "7c505081-dd87-4938-88bd-9e93589eb92c",
-          "nome": "Gustavo Henrique",
-          "email": "gustavo@mail.com",
-          "telefone": "48918283866",
-          "cpf": "00000000001"
-        },
-        {
-          "id": "432af330-c1fa-405c-89ac-94b17f199eb0",
-          "nome": "Yankee Mauricio",
-          "email": "yankee@mail.com",
-          "telefone": "84981578181",
-          "cpf": "12312354645"
-        }
-      ],
       "acesso": "Restrito",
-      "vagas": 3
+      "vagas": 3,
+      "participantes": [
+        "29269589-c56b-4d4d-9c80-278467b6cb4f",
+        "e5734440-91b8-4c0b-a73f-89c27708c6c8"
+      ]
     },
     {
       "id": "a9b8c7d6-e5f4-3a21-0b1c-2d3e4f5a6b7c",
@@ -97,17 +134,9 @@
       "data": "14-08-2026",
       "horario": "18:00",
       "local": "Bar da Esquina",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
-      "vagas": 60
+      "vagas": 60,
+      "participantes": []
     },
     {
       "id": "7c8b9a01-2d3e-4f5a-6b7c-8d9e0f1a2b3c",
@@ -116,22 +145,6 @@
       "data": "15-08-2026",
       "horario": "11:00",
       "local": "Sala 02",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        },
-        {
-          "id": "6b19f687-0f32-49b9-9034-283079ab4af7",
-          "nome": "João Silva",
-          "email": "joao@email.com.br",
-          "telefone": "48918283866",
-          "cpf": "00000000001"
-        }
-      ],
       "acesso": "Privado",
       "vagas": 32
     },
@@ -142,15 +155,6 @@
       "data": "16-08-2026",
       "horario": "15:00",
       "local": "Auditório Principal",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 55
     },
@@ -161,15 +165,6 @@
       "data": "17-08-2026",
       "horario": "20:00",
       "local": "Twitch",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 90
     },
@@ -180,15 +175,6 @@
       "data": "18-08-2026",
       "horario": "14:00",
       "local": "FigJam/Online",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 35
     },
@@ -199,15 +185,6 @@
       "data": "20-08-2026",
       "horario": "08:30",
       "local": "Plataforma Interna",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 75
     },
@@ -218,22 +195,6 @@
       "data": "21-08-2026",
       "horario": "21:00",
       "local": "Restaurante Executivo",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        },
-        {
-          "id": "c4374656-a25b-40c4-a645-30e7a1e29b9f",
-          "nome": "João Silva",
-          "email": "joao@email.com.br",
-          "telefone": "48918283866",
-          "cpf": "12312354645"
-        }
-      ],
       "acesso": "Privado",
       "vagas": 30
     },
@@ -244,15 +205,6 @@
       "data": "22-08-2026",
       "horario": "09:00",
       "local": "Sede da Empresa",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 80
     },
@@ -263,15 +215,6 @@
       "data": "23-08-2026",
       "horario": "17:00",
       "local": "Zoom",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 50
     },
@@ -282,15 +225,6 @@
       "data": "24-08-2026",
       "horario": "09:15",
       "local": "Discord",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Privado",
       "vagas": 30
     },
@@ -301,15 +235,6 @@
       "data": "25-08-2026",
       "horario": "13:30",
       "local": "Google Meet",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 40
     },
@@ -320,15 +245,6 @@
       "data": "26-08-2026",
       "horario": "10:00",
       "local": "Teams",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Privado",
       "vagas": 30
     },
@@ -339,15 +255,6 @@
       "data": "27-08-2026",
       "horario": "16:00",
       "local": "Auditório",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 100
     },
@@ -358,15 +265,6 @@
       "data": "28-08-2026",
       "horario": "19:00",
       "local": "Coworking Central",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 50
     },
@@ -377,15 +275,6 @@
       "data": "29-08-2026",
       "horario": "11:00",
       "local": "Discord (Voz)",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 30
     },
@@ -396,15 +285,6 @@
       "data": "30-08-2026",
       "horario": "14:00",
       "local": "Escritório",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Privado",
       "vagas": 30
     },
@@ -415,15 +295,6 @@
       "data": "31-08-2026",
       "horario": "10:00",
       "local": "YouTube",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 85
     },
@@ -434,15 +305,6 @@
       "data": "01-09-2026",
       "horario": "15:00",
       "local": "Google Meet",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 40
     },
@@ -453,15 +315,6 @@
       "data": "02-09-2026",
       "horario": "08:00",
       "local": "Zoom",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 50
     },
@@ -472,15 +325,6 @@
       "data": "03-09-2026",
       "horario": "16:30",
       "local": "Discord",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 30
     },
@@ -491,15 +335,6 @@
       "data": "04-09-2026",
       "horario": "09:00",
       "local": "Sala 05",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Privado",
       "vagas": 30
     },
@@ -510,15 +345,6 @@
       "data": "05-09-2026",
       "horario": "18:00",
       "local": "Discord",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 70
     },
@@ -529,15 +355,6 @@
       "data": "06-09-2026",
       "horario": "23:00",
       "local": "Remoto",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Privado",
       "vagas": 30
     },
@@ -548,15 +365,6 @@
       "data": "07-09-2026",
       "horario": "14:00",
       "local": "Google Meet",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 45
     },
@@ -567,15 +375,6 @@
       "data": "08-09-2026",
       "horario": "19:00",
       "local": "Clube de Campo",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 100
     },
@@ -586,15 +385,6 @@
       "data": "10-09-2026",
       "horario": "10:00",
       "local": "Google Meet",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 40
     },
@@ -605,15 +395,6 @@
       "data": "11-09-2026",
       "horario": "19:00",
       "local": "YouTube Live",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 100
     },
@@ -624,15 +405,6 @@
       "data": "12-09-2026",
       "horario": "09:00",
       "local": "Sala VIP",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Privado",
       "vagas": 30
     },
@@ -643,15 +415,6 @@
       "data": "13-09-2026",
       "horario": "14:30",
       "local": "Plataforma Interna",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 50
     },
@@ -662,15 +425,6 @@
       "data": "14-09-2026",
       "horario": "08:00",
       "local": "Zoom",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 40
     },
@@ -681,15 +435,6 @@
       "data": "15-09-2026",
       "horario": "20:00",
       "local": "Twitch",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 95
     },
@@ -700,15 +445,6 @@
       "data": "16-09-2026",
       "horario": "11:00",
       "local": "Discord",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 30
     },
@@ -719,15 +455,6 @@
       "data": "17-09-2026",
       "horario": "15:00",
       "local": "Google Meet",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 40
     },
@@ -738,15 +465,6 @@
       "data": "18-09-2026",
       "horario": "14:00",
       "local": "Teams",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Privado",
       "vagas": 30
     },
@@ -757,15 +475,6 @@
       "data": "19-09-2026",
       "horario": "16:00",
       "local": "Discord (Auditório)",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 100
     },
@@ -776,15 +485,6 @@
       "data": "20-09-2026",
       "horario": "10:00",
       "local": "Discord",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 30
     },
@@ -795,15 +495,6 @@
       "data": "21-09-2026",
       "horario": "09:30",
       "local": "Copa da Empresa",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 50
     },
@@ -814,15 +505,6 @@
       "data": "22-09-2026",
       "horario": "14:00",
       "local": "Sala de Reuniões 03",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Privado",
       "vagas": 30
     },
@@ -833,15 +515,6 @@
       "data": "23-09-2026",
       "horario": "16:00",
       "local": "Google Meet",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 40
     },
@@ -852,15 +525,6 @@
       "data": "24-09-2026",
       "horario": "19:30",
       "local": "YouTube",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 80
     },
@@ -871,15 +535,6 @@
       "data": "25-09-2026",
       "horario": "11:00",
       "local": "GitHub/Remoto",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 30
     },
@@ -890,15 +545,6 @@
       "data": "26-09-2026",
       "horario": "14:00",
       "local": "Teams",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Privado",
       "vagas": 30
     },
@@ -909,15 +555,6 @@
       "data": "27-09-2026",
       "horario": "10:30",
       "local": "Miro Board",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 35
     },
@@ -928,15 +565,6 @@
       "data": "28-09-2026",
       "horario": "17:00",
       "local": "Google Meet",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 65
     },
@@ -947,15 +575,6 @@
       "data": "29-09-2026",
       "horario": "09:00",
       "local": "Escritório HQ",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 40
     },
@@ -966,17 +585,11 @@
       "data": "30-09-2026",
       "horario": "15:00",
       "local": "Sala 01",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Privado",
-      "vagas": 30
+      "vagas": 30,
+      "participantes": [
+        "29269589-c56b-4d4d-9c80-278467b6cb4f"
+      ]
     },
     {
       "id": "a4b3c2d1-0e9f-487b-6c5d-4e3f2a1b0c9d",
@@ -985,15 +598,6 @@
       "data": "01-10-2026",
       "horario": "20:00",
       "local": "YouTube",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 100
     },
@@ -1004,15 +608,6 @@
       "data": "02-10-2026",
       "horario": "14:00",
       "local": "Google Meet",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 30
     },
@@ -1023,15 +618,6 @@
       "data": "03-10-2026",
       "horario": "11:00",
       "local": "Privado (Voz)",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Privado",
       "vagas": 30
     },
@@ -1042,15 +628,6 @@
       "data": "04-10-2026",
       "horario": "19:00",
       "local": "Auditório Digital",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 100
     },
@@ -1061,15 +638,6 @@
       "data": "05-10-2026",
       "horario": "16:00",
       "local": "VS Code Live Share",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 30
     },
@@ -1080,15 +648,6 @@
       "data": "06-10-2026",
       "horario": "14:00",
       "local": "Zoom",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Privado",
       "vagas": 30
     },
@@ -1099,15 +658,6 @@
       "data": "07-10-2026",
       "horario": "10:30",
       "local": "Plataforma Interna",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 60
     },
@@ -1118,15 +668,6 @@
       "data": "08-10-2026",
       "horario": "09:00",
       "local": "Discord",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Restrito",
       "vagas": 30
     },
@@ -1137,15 +678,6 @@
       "data": "09-10-2026",
       "horario": "15:00",
       "local": "Teams",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Privado",
       "vagas": 30
     },
@@ -1156,10 +688,6 @@
       "data": "05-07-2026",
       "horario": "19:00",
       "local": "Discord (Canal de voz)",
-      "participantes": [
-        "6625a...e1",
-        "6625a...e2"
-      ],
       "acesso": "Restrito",
       "vagas": 35
     },
@@ -1170,17 +698,19 @@
       "data": "09-07-2026",
       "horario": "14:00",
       "local": "Discord (Canal de voz)",
-      "participantes": [
-        {
-          "nome": "admin",
-          "email": "admin@mail.com",
-          "telefone": 88888888888,
-          "cpf": 66655544488,
-          "dataNascimento": "14/02/2005"
-        }
-      ],
       "acesso": "Público",
       "vagas": 70
+    },
+    {
+      "id": "f63dc408-2002-47ad-ae83-9c09d569b73e",
+      "titulo": "Apresentação da Plataforma Agendia",
+      "descricao": "Apresentação da Plataforma Agendia, mostrando funcionalidades e códigos.",
+      "data": "16-06-2026",
+      "horario": "09:00",
+      "local": "LabInfo 3 - ECT",
+      "acesso": "Público",
+      "vagas": 30,
+      "participantes": []
     }
   ]
 }

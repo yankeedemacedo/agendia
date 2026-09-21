@@ -1,70 +1,28 @@
 import {
-  getParticipantsService,
-  getParticipantByNameService,
-  registerParticipantService,
-  partialUpdateParticipantService,
+  createParticipantService,
   deleteParticipantService,
 } from "../services/participantService.js";
 
-export const getParticipants = async (req, res, next) => {
+export const createParticipant = async (req, res, next) => {
   try {
-    const eventId = req.params.eventId;
-    const participants = await getParticipantsService(eventId);
-    res.json(participants);
+    const participantId = req.userId;
+    const eventId = req.params.id;
+    const participant = await createParticipantService(eventId, participantId);
+    res
+      .status(201)
+      .json({ message: "Participação registrada com sucesso", participant });
   } catch (error) {
     next(error);
-  }
-};
-
-export const getParticipantByName = async (req, res, next) => {
-  try {
-    const eventId = req.params.eventId;
-    const name = req.params.name;
-    const participant = await getParticipantByNameService(eventId, name);
-    res.json(participant);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const registerParticipant = async (req, res, next) => {
-  try {
-    const eventId = req.params.eventId;
-    const participantData = req.body;
-    const participant = await registerParticipantService(
-      eventId,
-      participantData,
-    );
-    res.status(201).json({
-      message: "Participante registrado com sucesso!",
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const partialUpdateParticipant = async (req, res, next) => {
-  try {
-    const eventId = req.params.eventId;
-    const participantId = req.params.participantId;
-    const participantData = req.body;
-    const participant = await partialUpdateParticipantService(
-      eventId,
-      participantId,
-      participantData,
-    );
-    res.json(participant);
-  } catch (error) {
-    next(error);
+    return res.status(error.statusCode || 500).json({ error: error.message });
   }
 };
 
 export const deleteParticipant = async (req, res, next) => {
   try {
-    const eventId = req.params.eventId;
-    const participantId = req.params.participantId;
+    const eventId = req.params.id; // Supondo que o ID do evento seja enviado como parâmetro da rota
+    const participantId = req.userId; // Supondo que o ID do participante seja obtido do token de autenticação
     await deleteParticipantService(eventId, participantId);
-    res.json({ message: "Participante removido com sucesso" });
+    res.json({ message: "Participação removida com sucesso" });
   } catch (error) {
     next(error);
   }

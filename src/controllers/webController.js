@@ -3,27 +3,37 @@ import {
   getEventByIdRepository,
   getEventByNameRepository,
 } from "../repositories/eventRepository.js";
-import { registerParticipantService } from "../services/participantService.js";
+import { getMyEventsRepository } from "../repositories/participantRepository.js";
+import { getUserByIdRepository } from "../repositories/usersRepository.js";
 
 export const getEventsWeb = async (req, res) => {
   try {
-    const { search } = req.params;
+    const { search } = req.query;
     let events;
 
-    if (search) {
-      // Usa o repositório de busca por nome se houver uma query 'search'
+    if (search && search.trim() !== "") {
       events = await getEventByNameRepository(search);
     } else {
-      // Caso contrário, lista todos
       events = await getEventsRepository();
     }
 
-    res.render("index", { events, searchTerm: search });
+    res.render("index", { events, searchTerm: search || "" });
   } catch (error) {
     res.status(500).send("Erro ao carregar o Agendia: " + error.message);
   }
 };
 
+export const getMyEventsWeb = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const events = await getMyEventsRepository(userId);
+    res.render("meus-eventos", { userEvents: events });
+  } catch (error) {
+    res.status(500).send("Erro ao carregar seus eventos: " + error.message);
+  }
+};
+
+//  Corrigido: Apenas um async e sem parênteses extras na abertura
 export const getEventDetailsWeb = async (req, res) => {
   try {
     const { id } = req.params;
@@ -42,25 +52,55 @@ export const getEventDetailsWeb = async (req, res) => {
   }
 };
 
-export const registerParticipantWeb = async (req, res) => {
-  const { id } = req.params;
+export const registerPage = (req, res) => {
+  res.render("register", { error: null });
+};
 
-  const participantData = {
-    nome: req.body.nome,
-    email: req.body.email,
-    telefone: req.body.telefone,
-    cpf: req.body.cpf,
-    dataNascimento: req.body.dataNascimento,
-  };
+export const loginPage = (req, res) => {
+  const error = req.query.error;
+  res.render("login", { error });
+};
 
+export const userPage = async (req, res) => {
   try {
-    await registerParticipantService(id, participantData);
-    res.redirect(`/events/${id}?success=true`);
+    const user = await getUserByIdRepository(req.userId);
+
+    if (!user) {
+      return res.redirect("/login");
+    }
+
+    res.render("perfil", { user });
   } catch (error) {
-    const event = await getEventByIdRepository(id);
-    res.render("details", {
-      event,
-      error: error.message,
-    });
+    res.status(500).send("Erro ao carregar o perfil: " + error.message);
+  }
+};
+
+export const createEventPage = (req, res) => {
+  res.render("criar-evento", { event: null, error: null });
+};
+
+export const adminEventsPage = async (req, res) => {
+  try {
+    const events = await getEventsRepository();
+    res.render("analisar-eventos", { events });
+  } catch (error) {
+    res
+      .status(500)
+      .send("Erro ao carregar o painel administrativo: " + error.message);
+  }
+};
+
+export const editEventPage = async (req, res) => {
+  try {
+    const event = await getEventByIdRepository(req.params.id);
+
+    if (!event) {
+      return res
+        .status(404)
+        .render("error", { message: "Evento não encontrado" });
+    }
+    res.render("editar-evento", { event, error: null });
+  } catch (error) {
+    res.status(500).send("Erro ao carregar página de edição: " + error.message);
   }
 };

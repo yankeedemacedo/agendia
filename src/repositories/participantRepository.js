@@ -1,90 +1,65 @@
-import { db } from "../data/data.js";
-import { randomUUID } from "node:crypto";
-import Fuse from "fuse.js";
-import {
-  participantsListResponseDTO,
-  participantResponseDTO,
-} from "../dtos/participantDTO.js";
+import event from "../models/eventSchema.js";
+import user from "../models/userSchema.js";
 
-export const getParticipantsRepository = async (eventId) => {
-  db.read();
-  const event = db.data.events.find((p) => p.id === eventId);
-  const participants = event.participantes;
-  return participantsListResponseDTO(participants);
+export const getParticipantRepository = async (eventId, participantId) => {
+  const foundEvent = await event.findOne({
+    id: eventId,
+    participantes: participantId,
+  });
+
+  return foundEvent ? participantId : null;
 };
 
-export const getParticipantByNameRepository = async (eventId, name) => {
-  await db.read();
-  const event = db.data.events.find((p) => p.id === eventId);
+export const createParticipantRepository = async (eventId, participantId) => {
+  // 1. Verifica se o evento existe
+  const foundEvent = await event.findOne({ id: eventId });
+  if (!foundEvent) throw new Error("Evento não encontrado no banco");
 
-  const options = {
-    keys: ["nome"],
-    //0.0 (perfeito) a 1.0 (completamente diferente)
-    threshold: 0.0,
-  };
+  // 2. Verifica se o usuário existe
+  const foundUser = await user.findOne({ id: participantId });
+  if (!foundUser) throw new Error("Usuário não encontrado no banco");
 
-  const fuse = new Fuse(event.participantes, options);
-  const results = fuse.search(name);
-  const participants = results.map((result) => result.item);
-
-  return participantsListResponseDTO(participants);
-};
-
-export const registerParticipantRepository = async (
-  eventId,
-  participantData,
-) => {
-  await db.read();
-  const event = db.data.events.find((p) => p.id === eventId);
-  if (!event) {
-    return null;
+  // 3. Evita duplicidade usando o $addToSet (só adiciona se não existir no array)
+  // Se o participante já existir, o MongoDB não faz nada
+  if (foundEvent.participantes.includes(participantId)) {
+    throw new Error("Participação já registrada para este evento");
   }
-  const newParticipant = {
-    id: randomUUID(),
-    ...participantData,
-  };
-  event.participantes.push(newParticipant);
-  await db.write();
-  return participantResponseDTO(newParticipant);
-};
 
-export const parcialUpdateParticipantRepository = async (
-  eventId,
-  participantId,
-  eventData,
-) => {
-  await db.read();
-  const event = db.data.events.find((p) => p.id === eventId);
-  if (!event) {
-    return null;
-  }
-  const participantIndex = event.participantes.findIndex(
-    (p) => p.id === participantId,
-  );
-  if (participantIndex === -1) {
-    return null;
-  }
-  event.participantes[participantIndex] = {
-    ...event.participantes[participantIndex],
-    ...eventData,
-  };
-  await db.write();
-  return participantResponseDTO(event.participantes[participantIndex]);
+  // 4. Executa as atualizações atômicas em paralelo para melhor performance
+  await Promise.all([
+    event.updateOne(
+      { id: eventId },
+      { $addToSet: { participantes: participantId } },
+    ),
+    user.updateOne({ id: participantId }, { $addToSet: { eventos: eventId } }),
+  ]);
+
+  // Busca o evento atualizado para retornar a lista de participantes
+  const updatedEvent = await event.findOne({ id: eventId });
+  return updatedEvent.participantes;
 };
 
 export const deleteParticipantRepository = async (eventId, participantId) => {
-  await db.read();
-  const event = db.data.events.find((p) => p.id === eventId);
-  if (!event) {
-    return null;
+  await Promise.all([
+    event.updateOne(
+      { id: eventId },
+      { $pull: { participantes: participantId } },
+    ),
+    user.updateOne({ id: participantId }, { $pull: { eventos: eventId } }),
+  ]);
+
+  return participantId;
+};
+
+export const getMyEventsRepository = async (participantId) => {
+  const foundUser = await user.findOne({ id: participantId });
+  if (!foundUser || !foundUser.eventos || foundUser.eventos.length === 0) {
+    return [];
   }
-  const participantIndex = event.participantes.findIndex(
-    (p) => p.id === participantId,
-  );
-  if (participantIndex === -1) {
-    return null;
-  }
-  const deletedParticipant = event.participantes.splice(participantIndex, 1)[0];
-  await db.write();
-  return participantResponseDTO(deletedParticipant);
+
+  const completeEvents = await event.find({
+    id: { $in: foundUser.eventos },
+  });
+
+  return completeEvents;
 };

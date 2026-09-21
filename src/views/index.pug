@@ -2,7 +2,7 @@ extends layout
 
 block content
   section
-      header.section-header(style="display: flex; justify-content: space-between; align-items: center; gap-wrap: wrap; gap: 20px; margin-bottom: 40px;")
+      header.section-header(style="display: flex; justify-content: space-between; align-items: center; height: 100px; gap-wrap: wrap; gap: 10px; margin-bottom: 40px;")
         div
           h2(style="margin: 0;") Catálogo de Eventos
           p(style="color: var(--text-gray); margin: 0;") Explore experiências exclusivas em Natal
@@ -49,8 +49,8 @@ block content
       const query = document.getElementById('searchInput').value.trim();
       
       if (query) {
-        // Redireciona para /NomeDoEvento
-        window.location.href = '/' + encodeURIComponent(query);
+        // Redireciona para /event/NomeDoEvento
+        window.location.href = '/event/' + encodeURIComponent(query);
       } else {
         // Se vazio, volta para a home
         window.location.href = '/';
