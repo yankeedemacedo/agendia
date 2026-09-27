@@ -68,8 +68,8 @@ Monorepo: `apps/api` (Express, API JSON pura) + `apps/web` (SPA) + `packages/tok
 Modelo: `id` customizado (UUID) ao lado do `_id`; inscrições em `Ticket` (índice único) com dual-write nos arrays; `Waitlist` com promoção automática ao liberar vaga.
 
 ## 🚀 Deploy (resumo)
-- **API**: qualquer host Node (`npm run start:api`) com `MONGO_URI`/`JWT_SECRET`/`NODE_ENV=production` (cookie vira `secure`)
-- **Web**: `dist/` estático (Vercel/Netlify/Nginx) com `VITE_API_URL` apontando p/ API
+- **API** (ex.: Railway): qualquer host Node (`npm run start:api`) com `MONGO_URI`/`JWT_SECRET`/`NODE_ENV=production` (cookie vira `secure`) **+ `FRONTEND_URL=https://seu-front...`** (CORS + cookie `SameSite=None`; sem ela, cross-origin é bloqueado)
+- **Web** (ex.: Vercel): `dist/` estático com **`VITE_API_URL=https://sua-api...` definida antes do build** (o Vite injeta no build; var nova exige rebuild)
 - **Cron**: `send-reminders.js` diário; **câmera do leitor QR exige HTTPS** (ou localhost)
 
 ## 🆘 Problemas comuns
