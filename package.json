@@ -1,8 +1,8 @@
 {
-  "name": "projeto_api",
+  "name": "agendia",
   "version": "1.0.0",
-  "description": "",
-  "keywords": [],
+  "private": true,
+  "description": "Agendia — monorepo (API + SPA + tokens)",
   "homepage": "https://github.com/yankeemauricio/agendia#readme",
   "bugs": {
     "url": "https://github.com/yankeemauricio/agendia/issues"
@@ -12,28 +12,16 @@
     "url": "git+https://github.com/yankeemauricio/agendia.git"
   },
   "license": "ISC",
-  "author": "",
   "type": "module",
-  "main": "index.js",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
-  },
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "cookie-parser": "^1.4.7",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "express-validator": "^7.3.2",
-    "fuse.js": "^7.3.0",
-    "jsonwebtoken": "^9.0.3",
-    "lowdb": "^7.0.1",
-    "mongodb": "^7.3.0",
-    "mongoose": "^9.7.0",
-    "pug": "^3.0.4"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.14"
+    "test": "npm run test --workspace @agendia/api",
+    "dev:api": "npm run dev --workspace @agendia/api",
+    "start:api": "npm run start --workspace @agendia/api",
+    "dev:web": "npm run dev --workspace @agendia/web",
+    "build:web": "npm run build --workspace @agendia/web"
   }
 }
