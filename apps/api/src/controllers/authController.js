@@ -8,7 +8,13 @@ import { getUserByIdService } from "../services/userService.js";
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const isProd = process.env.NODE_ENV === "production";
+
+// Cross-site (front e API em domínios diferentes) exige SameSite=None+Secure;
+// mesma origem funciona com Strict. COOKIE_SAMESITE força quando preciso.
+const cookieSameSite =
+  process.env.COOKIE_SAMESITE ?? (process.env.FRONTEND_URL ? "none" : "strict");
+const cookieSecure =
+  process.env.NODE_ENV === "production" || cookieSameSite === "none";
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -45,8 +51,8 @@ export const login = async (req, res) => {
     // 5. Anexa o token no cabeçalho através do Cookie HttpOnly
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "strict",
-      secure: isProd,
+      sameSite: cookieSameSite,
+      secure: cookieSecure,
       maxAge: 1 * 60 * 60 * 1000, // 1 hora
     });
 
@@ -65,8 +71,8 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    sameSite: "strict",
-    secure: isProd,
+    sameSite: cookieSameSite,
+    secure: cookieSecure,
   });
   res.redirect("/login");
 };

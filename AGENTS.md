@@ -9,6 +9,7 @@
 ## Env
 - Copy `.env.example` to `.env` (gitignored, never commit): `MONGO_URI` (com `dbName: "agendia"` no código), `PORT`, `JWT_SECRET`, `NODE_ENV`. SPA usa `apps/web/.env` com `VITE_API_URL` (vazio = mesma origem).
 - All JWT sign/verify uses `process.env.JWT_SECRET`. Cookie is `secure` only when `NODE_ENV=production`.
+- Deploy cross-origin: `FRONTEND_URL` (origens separadas por vírgula) habilita CORS com credentials + cookie `SameSite=None` (`COOKIE_SAMESITE` força; default `none` com `FRONTEND_URL`, `strict` sem).
 
 ## Architecture
 - Monorepo ESM: `apps/api` (Express 5, API JSON pura — sem SSR), `apps/web` (Vite + React + TS, Router + React Query), `packages/tokens` (design tokens). Fases do reboot em `docs/reboot/FASES.md`, contrato da API em `docs/reboot/API.md`.
